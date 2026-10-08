@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- page:start -->
+<title>Lyceva</title>
+<meta name="description" content="Lyceva is the operating system for modern schools: admissions, students, academics, fees, staff, parents, reporting and AI-assisted administration in one platform.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+  /* Layout: a single narrow column read like a school register — ruled rows, short codes in the margin, one marigold mark for emphasis. */
+  :root {
+    --paper: #f5f6f8;
+    --surface: #ffffff;
+    --ink: #15203a;
+    --muted: #586179;
+    --rule: #d9dde6;
+    --accent: #e3a21a;
+    --accent-ink: #15203a;
+    --link: #1f4fbf;
+
+    --font-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+    --font-body: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+    --step-0: 1.0625rem;
+    --step-1: 1.25rem;
+    --step-2: 1.6rem;
+    --step-3: clamp(2rem, 4.5vw, 2.75rem);
+    --step-4: clamp(2.75rem, 8vw, 4.75rem);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0f1524;
+      --surface: #161e31;
+      --ink: #e8ebf2;
+      --muted: #9ba3b8;
+      --rule: #2a3450;
+      --accent: #f0b43a;
+      --accent-ink: #0f1524;
+      --link: #8fb0ff;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0f1524;
+    --surface: #161e31;
+    --ink: #e8ebf2;
+    --muted: #9ba3b8;
+    --rule: #2a3450;
+    --accent: #f0b43a;
+    --accent-ink: #0f1524;
+    --link: #8fb0ff;
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 68rem;
+    margin: 0 auto;
+    padding-inline: max(16px, 4vw);
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    line-height: 1.1;
+    text-wrap: balance;
+    margin: 0;
+  }
+  p { margin: 0; max-width: 62ch; }
+  a { color: var(--link); }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Header */
+  .site-header {
+    border-bottom: 1px solid var(--rule);
+  }
+  .site-header .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.1rem;
+  }
+  .wordmark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .wordmark .mark {
+    width: 0.9rem;
+    height: 0.9rem;
+    background: var(--accent);
+    border-radius: 2px;
+    transform: rotate(45deg);
+  }
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .status::before {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* Hero */
+  .hero {
+    padding-block: clamp(3.5rem, 9vw, 7rem) clamp(3rem, 7vw, 5rem);
+    display: grid;
+    gap: 1.75rem;
+  }
+  .hero h1 {
+    font-size: var(--step-4);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    max-width: 14ch;
+  }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(transparent 62%, var(--accent) 62%, var(--accent) 90%, transparent 90%);
+  }
+  .hero .lede {
+    font-size: var(--step-1);
+    color: var(--ink);
+  }
+  .hero .sub { color: var(--muted); }
+  .hero .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    padding-top: 0.5rem;
+  }
+  .pill {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--accent);
+    color: var(--accent-ink);
+    padding: 0.55rem 0.9rem;
+    border-radius: 3px;
+  }
+  .text-link {
+    font-weight: 600;
+    text-underline-offset: 3px;
+  }
+
+  /* Sections */
+  section.block {
+    border-top: 1px solid var(--rule);
+    padding-block: clamp(3rem, 7vw, 5rem);
+    display: grid;
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+    gap: 1.5rem 3rem;
+  }
+  section.block > header { display: grid; gap: 0.75rem; align-content: start; }
+  section.block h2 {
+    font-size: var(--step-3);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .body { display: grid; gap: 1.25rem; min-width: 0; }
+  .body .intro { font-size: var(--step-1); }
+  .body .muted { color: var(--muted); }
+
+  /* Module register */
+  .register {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    border-top: 2px solid var(--ink);
+  }
+  .register li {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 13rem) minmax(0, 1fr);
+    gap: 0.5rem 1.5rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .register .code {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  .register h3 {
+    font-size: var(--step-1);
+    font-weight: 500;
+  }
+  .register p { color: var(--muted); }
+
+  /* AI list */
+  .ai-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    gap: 0 2rem;
+  }
+  .ai-list li {
+    padding: 0.85rem 0 0.85rem 1.6rem;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .ai-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1.45rem;
+    width: 0.7rem;
+    height: 2px;
+    background: var(--accent);
+  }
+  .note {
+    font-size: 0.95rem;
+    color: var(--muted);
+    border-left: 2px solid var(--accent);
+    padding-left: 1rem;
+  }
+
+  /* Tenants */
+  .tenants {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  .tenant {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1.1rem 1.2rem;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .tenant .name {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+  .tenant ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .tenant li {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 0.15rem 0.4rem;
+  }
+
+  /* Audiences */
+  .audiences {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .audiences li {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 500;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    padding: 0.4rem 1rem;
+  }
+
+  /* Contact */
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    padding-top: 0.5rem;
+  }
+  .email {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 6px;
+    user-select: all;
+    overflow-wrap: anywhere;
+  }
+  .copy {
+    font: inherit;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 0.45rem 0.75rem;
+    cursor: pointer;
+  }
+  .copy:hover { border-color: var(--ink); }
+
+  /* Footer */
+  .site-footer {
+    border-top: 2px solid var(--ink);
+  }
+  .site-footer .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    padding-block: 2rem 2.5rem;
+  }
+  .site-footer .tag { color: var(--muted); }
+
+  @media (max-width: 760px) {
+    section.block { grid-template-columns: minmax(0, 1fr); }
+    .register li { grid-template-columns: 3.25rem minmax(0, 1fr); }
+    .register p { grid-column: 2; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .copy { transition: border-color 0.15s ease; }
+  }
+</style>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="#top" aria-label="Lyceva home"><span class="mark" aria-hidden="true"></span>Lyceva</a>
+    <span class="label status">In development</span>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap">
+    <section class="hero">
+      <span class="label">School management platform</span>
+      <h1>The operating system for <em>modern schools.</em></h1>
+      <p class="lede">Lyceva brings admissions, student management, academics, fees, staff operations, parent engagement, reporting, and AI-assisted administration into one connected platform.</p>
+      <p class="sub">Built to help schools spend less time managing systems and more time running better schools.</p>
+      <div class="actions">
+        <span class="pill">Coming soon</span>
+        <a class="text-link" href="#contact">Register interest</a>
+      </div>
+    </section>
+
+    <section class="block" id="platform">
+      <header>
+        <span class="label">The platform</span>
+        <h2>One platform. Fewer disconnected tools.</h2>
+      </header>
+      <div class="body">
+        <p class="intro">Schools often rely on spreadsheets, paper records, messaging apps, payment tools, and separate administrative systems that do not work together.</p>
+        <p class="muted">Lyceva is being built to bring those workflows into a single secure platform.</p>
+        <ol class="register" aria-label="Lyceva modules">
+          <li><span class="code">ADM</span><h3>Admissions &amp; Enrollment</h3><p>Manage applications, student onboarding, enrollment records, and admissions workflows from one place.</p></li>
+          <li><span class="code">STU</span><h3>Student Management</h3><p>Maintain structured student profiles, academic records, class information, and important school data.</p></li>
+          <li><span class="code">ACA</span><h3>Academics</h3><p>Support classes, subjects, assessments, results, attendance, and academic administration.</p></li>
+          <li><span class="code">FEE</span><h3>Fees &amp; Payments</h3><p>Track school fees, payment records, balances, invoices, and financial activity.</p></li>
+          <li><span class="code">STF</span><h3>Staff Administration</h3><p>Manage staff records, roles, permissions, and internal operational workflows.</p></li>
+          <li><span class="code">PAR</span><h3>Parent Engagement</h3><p>Give schools a structured way to communicate important information with parents and guardians.</p></li>
+          <li><span class="code">RPT</span><h3>Reports &amp; Insights</h3><p>Turn school data into useful reports and operational insights for administrators.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="block" id="ai">
+      <header>
+        <span class="label">AI</span>
+        <h2>AI built into school operations</h2>
+      </header>
+      <div class="body">
+        <p class="intro">Lyceva is being designed with AI as part of the platform, not as a separate chatbot.</p>
+        <p class="muted">Using technologies such as Claude, Lyceva aims to help authorized school staff:</p>
+        <ul class="ai-list">
+          <li>Summarize operational and student information</li>
+          <li>Generate administrative reports</li>
+          <li>Draft school communications</li>
+          <li>Assist with admissions workflows</li>
+          <li>Reduce repetitive administrative work</li>
+          <li>Ask questions about permitted school data using natural language</li>
+          <li>Surface useful operational insights</li>
+        </ul>
+        <p class="note">AI functionality will be designed around role-based permissions and school data boundaries.</p>
+      </div>
+    </section>
+
+    <section class="block" id="security">
+      <header>
+        <span class="label">Architecture</span>
+        <h2>Built for secure multi-school operations</h2>
+      </header>
+      <div class="body">
+        <p class="intro">Lyceva is being developed as a multi-tenant SaaS platform, allowing each school to operate within its own protected workspace.</p>
+        <p class="muted">Each institution will have its own users, roles, permissions, records, workflows, and administrative environment.</p>
+        <div class="tenants" aria-label="Example school workspaces">
+          <div class="tenant">
+            <span class="label">Workspace A</span>
+            <span class="name">A primary school</span>
+            <ul><li>Users</li><li>Roles</li><li>Records</li><li>Workflows</li></ul>
+          </div>
+          <div class="tenant">
+            <span class="label">Workspace B</span>
+            <span class="name">A secondary school</span>
+            <ul><li>Users</li><li>Roles</li><li>Records</li><li>Workflows</li></ul>
+          </div>
+          <div class="tenant">
+            <span class="label">Workspace C</span>
+            <span class="name">A school group campus</span>
+            <ul><li>Users</li><li>Roles</li><li>Records</li><li>Workflows</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="audience">
+      <header>
+        <span class="label">Audience</span>
+        <h2>Who Lyceva is for</h2>
+      </header>
+      <div class="body">
+        <p class="muted">Lyceva is being built for:</p>
+        <ul class="audiences">
+          <li>Primary schools</li>
+          <li>Secondary schools</li>
+          <li>Private schools</li>
+          <li>School groups</li>
+          <li>Education administrators</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="block" id="contact">
+      <header>
+        <span class="label">Status</span>
+        <h2>Currently in development</h2>
+      </header>
+      <div class="body">
+        <p class="intro">Lyceva is currently being built and is not yet publicly available.</p>
+        <p class="muted">We are developing the core platform, school administration infrastructure, and AI-assisted workflows ahead of an initial launch.</p>
+        <h3 class="label" style="padding-top:1rem">Interested in Lyceva?</h3>
+        <div class="contact">
+          <a class="email" id="email" href="mailto:admin@lyceva.app">admin@lyceva.app</a>
+          <button class="copy" id="copy-email" type="button">Copy email</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <span class="wordmark"><span class="mark" aria-hidden="true"></span>Lyceva</span>
+      <p class="tag">School operations, connected.</p>
+    </div>
+    <p class="label">&copy; 2026 Lyceva. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var btn = document.getElementById("copy-email");
+    var email = document.getElementById("email");
+    btn.addEventListener("click", function () {
+      var done = function () { btn.textContent = "Copied"; setTimeout(function () { btn.textContent = "Copy email"; }, 1800); };
+      var fallback = function () {
+        var range = document.createRange();
+        range.selectNodeContents(email);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        btn.textContent = "Selected";
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email.textContent).then(done, fallback);
+      } else {
+        fallback();
+      }
+    });
+  })();
+</script>
+<!-- page:end -->
+</body>
+</html>
